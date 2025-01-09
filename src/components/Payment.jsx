@@ -12,11 +12,9 @@ const RazorpayPayment = ({ setModal }) => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneCode, setPhoneCode] = useState("");
-  const [currency, setCurrency] = useState("AED");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const amount = currency == "AED" ? 100 : 2400;
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
   const api = `${apiUrl}/dubai/add-consultation-payment-done`;
 
@@ -29,7 +27,6 @@ const RazorpayPayment = ({ setModal }) => {
     if (!phoneNumber) errors.phone = "Phone number is required";
     else if (phoneNumber.length < 8)
       errors.phone = "Phone number must be at least 8 digits";
-    if (!currency) errors.currency = "Currency selection is required";
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -37,7 +34,6 @@ const RazorpayPayment = ({ setModal }) => {
   const handleChange = (field, value) => {
     if (field === "name") setName(value);
     if (field === "email") setEmail(value);
-    if (field === "currency") setCurrency(value);
 
     const fieldErrors = { ...errors };
     if (field === "name" && !value.trim()) {
@@ -55,13 +51,6 @@ const RazorpayPayment = ({ setModal }) => {
         delete fieldErrors.email;
       }
     }
-
-    if (field === "currency" && !value) {
-      fieldErrors.currency = "Currency selection is required";
-    } else {
-      delete fieldErrors.currency;
-    }
-
     setErrors(fieldErrors);
   };
 
@@ -90,8 +79,8 @@ const RazorpayPayment = ({ setModal }) => {
       email,
       phone_code: phoneCode,
       phone: phoneNumber,
-      currency,
-      amount,
+      currency: "INR",
+      amount : 2400,
       admin_id: 104,
     };
 
@@ -106,8 +95,8 @@ const RazorpayPayment = ({ setModal }) => {
             name: name,
             phone_code: phoneCode,
             phone_number: phoneNumber,
-            amount: amount,
-            currency: currency,
+            amount: 2400,
+            currency: "INR",
             consultation_id: responses.data?.data?.consultation_id,
             mentor_id: 104,
           },
@@ -192,54 +181,6 @@ const RazorpayPayment = ({ setModal }) => {
           />
           {errors.phone && (
             <p className="text-sm text-red-500 mt-0.5">{errors.phone}</p>
-          )}
-        </div>
-
-        <div className="flex flex-col space-y-1 mb-6 relative">
-          <label
-            htmlFor="currency"
-            className="text-sm font-medium text-gray-700"
-          >
-            Preferred currency for payment:
-          </label>
-          <div className="grid grid-cols-2">
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="inr"
-                name="currency"
-                value="INR"
-                checked={currency === "INR"}
-                onChange={(e) => handleChange("currency", e.target.value)}
-                className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="inr"
-                className="ml-2 text-sm font-medium text-gray-700"
-              >
-                INR
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="aed"
-                name="currency"
-                value="AED"
-                checked={currency === "AED"}
-                onChange={(e) => handleChange("currency", e.target.value)}
-                className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="aed"
-                className="ml-2 text-sm font-medium text-gray-700"
-              >
-                AED
-              </label>
-            </div>
-          </div>
-          {errors.currency && (
-            <p className="text-sm text-red-500 mt-0.5">{errors.currency}</p>
           )}
         </div>
 
