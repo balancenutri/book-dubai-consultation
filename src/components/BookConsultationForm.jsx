@@ -177,13 +177,11 @@ export default function BookConsultationForm({
 
     if (firstAvailableSlot.id < 5) {
       setIsOpen(0);
-    } else if (firstAvailableSlot.id < 13) {
+    } else if (firstAvailableSlot.id < 17) {
       setIsOpen(1);
-    } else if (firstAvailableSlot.id < 20) {
-      setIsOpen(2);
     } else {
-      setIsOpen(3);
-    }
+      setIsOpen(2);
+    } 
     return categories;
   };
 
